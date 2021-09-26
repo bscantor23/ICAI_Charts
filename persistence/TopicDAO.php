@@ -14,6 +14,6 @@ class TopicDAO
     INNER JOIN topic b ON a.topic_idTopic = b.idTopic
     INNER JOIN edition c ON a.edition_idEdition = c.idEdition
     WHERE c.year = '$this->year'
-    GROUP BY 1 ORDER BY 1;";
+    GROUP BY 2 ORDER BY 2;";
   }
 }
