@@ -17,7 +17,7 @@ class Connection{
     }
     
     public function extrain(){
-        return $this -> result -> fetch_row();
+        return $this -> result -> fetch_all();
     }
 }
 ?>

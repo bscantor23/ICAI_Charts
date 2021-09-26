@@ -10,7 +10,7 @@ class TopicDAO
 
   public function papersByTopic()
   {
-    return "SELECT b.idTopic, idb.name, a.accepted, a.rejected FROM editiontopic a
+    return "SELECT b.idTopic, b.name, a.accepted, a.rejected FROM editiontopic a
     INNER JOIN topic b ON a.topic_idTopic = b.idTopic
     INNER JOIN edition c ON a.edition_idEdition = c.idEdition
     WHERE c.year = '$this->year'

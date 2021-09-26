@@ -23,10 +23,14 @@ class Edition
   {
     $this->connection->open();
     $this->connection->execute($this->dao->allEditions());
+    $results = $this->connection->extrain();
+
     $editions = array();
-    while ($result = $this->connection->extraer() != null) {
+
+    foreach ($results as $result) {
       array_push($editions, new Edition($result[0], $result[1], $result[2]));
     }
+
     $this->connection->close();
     return $editions;
   }
@@ -60,5 +64,9 @@ class Edition
   public function getYear()
   {
     return $this->year;
+  }
+
+  public function toString(){
+    return "id: $this->idEdition, name: $this->name";
   }
 }

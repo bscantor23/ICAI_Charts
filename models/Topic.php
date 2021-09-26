@@ -1,6 +1,6 @@
 <?php
 require_once "persistence/Connection.php";
-require_once "persistence/Topic.php";
+require_once "persistence/TopicDAO.php";
 
 class Topic
 {
@@ -19,12 +19,16 @@ class Topic
     $this->dao = new TopicDAO($year);
   }
 
+
   public function getInfoChart()
   {
     $this->connection->open();
-    $this->connection->execute($this->dao->allEditions());
+    $this->connection->execute($this->dao->papersByTopic());
+    $results = $this->connection->extrain();
+
     $topics = array();
-    while ($result = $this->connection->extraer() != null) {
+
+    foreach ($results as $result) {
       array_push($topics, new Topic($result[0], $result[1], $result[2],$result[3]));
     }
     $this->connection->close();
@@ -66,5 +70,9 @@ class Topic
   public function getRejected()
   {
     return $this->rejected;
+  }
+
+  public function toString(){
+    return "id: $this->idTopic, name: $this->name, accepted: $this->accepted, rejected: $this->rejected";
   }
 }
