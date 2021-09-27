@@ -24,7 +24,7 @@ class EditionTopic
     $this->connection->execute($this->dao->acceptedPapers());
     $results = $this->connection->extrain();
     $this->connection->close();
-    
+
     $this->papers = $results[0][0];
     $this->accepted = $results[0][1];
     $this->rejected = $results[0][2];
@@ -61,7 +61,8 @@ class EditionTopic
     return $this->rejected;
   }
 
-  public function toString(){
+  public function toString()
+  {
     return "papers: $this->papers, accepted: $this->accepted, rejected: $this->rejected";
   }
 }

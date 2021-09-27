@@ -1,5 +1,4 @@
 <?php
-
 require_once "models/Edition.php";
 $editions = (new Edition())->getEditions();
 ?>
@@ -11,61 +10,14 @@ $editions = (new Edition())->getEditions();
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>ICAI 2021</title>
+  <link rel="icon" type="image/png" href="presentation/assets/icai2.png" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.1/css/all.css" />
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  <script src="presentation/js/jquery.js"></script>
+  <script ype="text/javascript" src="presentation/js/jquery.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script>
-    let pieChart;
-    let barChart;
-    let papers_num = 0;
-
-    const options = {
-      'width': 1100,
-      'height': 400,
-    };
-
-    google.charts.load('current', {
-      'packages': ['corechart', 'bar']
-    });
-
-    google.charts.setOnLoadCallback(drawCharts);
-
-    async function drawCharts() {
-
-      const results = await $.ajax({
-        url: "getGraphsInfo.php",
-        dataType: "json",
-        type: "POST",
-        data: {
-          "year": <?php echo end($editions)->getYear() ?>
-        }
-      });
-
-      papers_num = results[1]["papers"];
-
-      var data = new google.visualization.DataTable();
-      data.addColumn('string', 'state');
-      data.addColumn('number', 'papers');
-      data.addRows([
-        ['Accepted', parseInt(results[1]["accepted"])],
-        ['Rejected', parseInt(results[1]["rejected"])],
-      ]);
-
-      // Instantiate and draw our chart, passing in some options.
-      var chart = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
-      chart.draw(data, options);
-      pieChart = chart;
-
-      var data = google.visualization.arrayToDataTable(results[0]);
-      var chart = new google.charts.Bar(document.getElementById('chart_div_bar'));
-      chart.draw(data, google.charts.Bar.convertOptions(options));
-      barChart = chart;
-
-    }
-  </script>
+  <script type="text/javascript" src="presentation/js/charts.js"></script>
 </head>
 
 <body>
@@ -73,7 +25,7 @@ $editions = (new Edition())->getEditions();
   <div class="container">
     <div class="row">
       <div class="col-lg-3 col-md-4 text-center">
-        <img src="presentation/assets/icai.png" width="200">
+        <img src="presentation/assets/icai.png" width="200" alt="">
       </div>
       <div class="col-lg-9 col-md-12">
         <h4>
@@ -108,7 +60,6 @@ $editions = (new Edition())->getEditions();
               <a class="dropdown-item" href="index.php?pid=keynotes">Keynote Speakers</a>
               <a class="dropdown-item" href="index.php?pid=acceptedPapers">Accepted Papers</a>
             </div>
-
           </li>
           <li class="nav-item"><a class="nav-link" href="index.php?pid=proceedings">Proceedings</a></li>
           <li class="nav-item"><a class="nav-link" href="index.php?pid=registration">Registration</a></li>
@@ -118,9 +69,7 @@ $editions = (new Edition())->getEditions();
                 Editions</a>
               <a class="dropdown-item" href="index.php?pid=statsIcai">ICAI</a>
               <a class="dropdown-item" href="index.php?pid=statsIcaiWorkshops">ICAI Workshops</a>
-
             </div>
-
           </li>
           <li class="nav-item"><a class="nav-link" href="index.php?pid=contact">Contact</a>
           </li>
@@ -145,6 +94,7 @@ $editions = (new Edition())->getEditions();
               <label class="input-group-text">Edition</label>
             </div>
             <select class="custom-select" id="editions">
+              <option id="pred" value="">Select Edition</option>
               <?php foreach ($editions as $edition) { ?>
                 <option value="<?php echo $edition->getYear() ?>"><?php echo $edition->getYear() ?></option>
               <?php } ?>
@@ -153,62 +103,43 @@ $editions = (new Edition())->getEditions();
         </div>
       </div>
     </div>
-    <h3>Accepted Papers</h3>
-    <div class="d-flex">
-      <h4>Total Submissions:</h4>
-      <h4 id="papers"></h4>
+    <div id="chart_content" style="display:none;">
+      <h3>Accepted Papers</h3>
+      <div class="d-flex">
+        <h4>Total Submissions:</h4>
+        <h4 id="papers"></h4>
+      </div>
+      <div id="chart_div_pie"></div>
+      <h3>Papers by Topic</h3>
+      <div id="chart_div_bar"></div>
     </div>
-    <div id="chart_div_pie"></div>
-    <h3>Accepted Papers</h3>
-    <div id="chart_div_bar"></div>
-
+    <hr>
+    <h3>Organized by</h3>
+    <div class="text-center">
+      <a href="https://www.udistrital.edu.co" target="_blank"><img src="presentation/assets//ud.png" height="100" data-toggle="tooltip" data-placement="bottom" title="Universidad Distrital Francisco Jose de Caldas" alt=""></a> <a href="https://www.frba.utn.edu.ar/" target="_blank"><img src="presentation/assets//utn.png" height="100" data-toggle="tooltip" data-placement="bottom" title="Universidad Tecnológica Nacional Facultad Regional Buenos Aires" alt=""></a>
+    </div>
+    <h3>Sponsored by</h3>
+    <div class="text-center">
+      <a href="http://www.itiud.org" target="_blank"><img src="presentation/assets//iti.png" height="100" data-toggle="tooltip" data-placement="bottom" title="Information Technologies Innovation Research Group" alt=""></a> <a href="http://www.springer.com" target="_blank"><img src="presentation/assets//springer2.jpg" height="100" data-toggle="tooltip" data-placement="bottom" title="Springer" alt=""></a> <a href="https://www.strategicbp.net/" target="_blank"><img src="presentation/assets/sbp.png" height="100" data-toggle="tooltip" data-placement="bottom" title="Science Based Platforms" alt=""></a>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="card bg-light">
+          <div class="card-header">Visitors</div>
+          <div class="card-body">
+            <script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=p1GQ85WJS_ieJFW7M6EtdMiVy9rV7Gz2ZMyKu44nWFw&cl=ffffff&w=a"></script>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="text-center text-muted">
       &copy; ITI Research Group<br>2018 - 2021 All rights reserved
     </div>
   </div>
   <br>
-
-  <script type="text/javascript">
-    console.log(papers_num);
-    let papers = document.getElementById("papers");
-
-    papers.textContent = papers_num;
-
-    let selectElement = document.getElementById("editions");
-    selectElement.addEventListener('change', async () => {
-
-      let year = selectElement.value;
-
-      const results = await $.ajax({
-        url: "getGraphsInfo.php",
-        dataType: "json",
-        type: "POST",
-        data: {
-          year
-        }
-      });
-
-      console.log(results);
-
-      var pieData = new google.visualization.DataTable();
-      pieData.addColumn('string', 'state');
-      pieData.addColumn('number', 'papers');
-      pieData.addRows([
-        ['Accepted', parseInt(results[1]["accepted"])],
-        ['Rejected', parseInt(results[1]["rejected"])],
-      ]);
-
-      var barData = google.visualization.arrayToDataTable(results[0]);
-
-      pieChart.draw(pieData, options);
-      papers.textContent = results[1]["papers"];
-
-      barChart.draw(barData, google.charts.Bar.convertOptions(options));
-    })
-  </script>
-
-
+  <script src="presentation/js/app.js"></script>
 </body>
-
 
 </html>

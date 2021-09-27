@@ -66,7 +66,8 @@ class Edition
     return $this->year;
   }
 
-  public function toString(){
+  public function toString()
+  {
     return "id: $this->idEdition, name: $this->name";
   }
 }

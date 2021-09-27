@@ -9,7 +9,7 @@ class Topic
   private $accepted;
   private $rejected;
 
-  public function Topic( $year = "", $idTopic = 0, $name = "", $accepted = 0, $rejected = 0)
+  public function Topic($year = "", $idTopic = 0, $name = "", $accepted = 0, $rejected = 0)
   {
     $this->idTopic = $idTopic;
     $this->name = $name;
@@ -18,7 +18,6 @@ class Topic
     $this->connection = new Connection();
     $this->dao = new TopicDAO($year);
   }
-
 
   public function getInfoChart()
   {
@@ -29,12 +28,11 @@ class Topic
     $topics = array();
 
     foreach ($results as $result) {
-      array_push($topics, new Topic("", $result[0], $result[1], $result[2],$result[3]));
+      array_push($topics, new Topic("", $result[0], $result[1], $result[2], $result[3]));
     }
     $this->connection->close();
     return $topics;
   }
-  
 
   /**
    * @return TopicDAO
@@ -72,7 +70,8 @@ class Topic
     return $this->rejected;
   }
 
-  public function toString(){
+  public function toString()
+  {
     return "id: $this->idTopic, name: $this->name, accepted: $this->accepted, rejected: $this->rejected";
   }
 }
