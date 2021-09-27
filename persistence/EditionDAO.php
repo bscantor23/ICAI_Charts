@@ -7,6 +7,6 @@ class EditionDAO
 
   public function allEditions()
   {
-    return "SELECT idEdition, name, `year` FROM `edition`;";
+    return "SELECT idEdition, name, `year` FROM `edition` ORDER BY `year` DESC;";
   }
 }

@@ -1,71 +1,18 @@
-<?php
-
-require_once "models/Edition.php";
-$editions = (new Edition())->getEditions();
-?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>ICAI 2021</title>
+  <link rel="icon" type="image/png" href="img/logos/icai2.png" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  <script src="presentation/js/jquery.js"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script>
-    let pieChart;
-    let barChart;
-    let papers_num = 0;
-
-    const options = {
-      'width': 1100,
-      'height': 400,
-    };
-
-    google.charts.load('current', {
-      'packages': ['corechart', 'bar']
-    });
-
-    google.charts.setOnLoadCallback(drawCharts);
-
-    async function drawCharts() {
-
-      const results = await $.ajax({
-        url: "getGraphsInfo.php",
-        dataType: "json",
-        type: "POST",
-        data: {
-          "year": <?php echo end($editions)->getYear() ?>
-        }
-      });
-
-      papers_num = results[1]["papers"];
-
-      var data = new google.visualization.DataTable();
-      data.addColumn('string', 'state');
-      data.addColumn('number', 'papers');
-      data.addRows([
-        ['Accepted', parseInt(results[1]["accepted"])],
-        ['Rejected', parseInt(results[1]["rejected"])],
-      ]);
-
-      // Instantiate and draw our chart, passing in some options.
-      var chart = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
-      chart.draw(data, options);
-      pieChart = chart;
-
-      var data = google.visualization.arrayToDataTable(results[0]);
-      var chart = new google.charts.Bar(document.getElementById('chart_div_bar'));
-      chart.draw(data, google.charts.Bar.convertOptions(options));
-      barChart = chart;
-
-    }
-  </script>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.1/css/all.css" />
 </head>
 
 <body>
@@ -73,7 +20,7 @@ $editions = (new Edition())->getEditions();
   <div class="container">
     <div class="row">
       <div class="col-lg-3 col-md-4 text-center">
-        <img src="presentation/assets/icai.png" width="200">
+        <img src="img/logos/icai.png" width="200">
       </div>
       <div class="col-lg-9 col-md-12">
         <h4>
@@ -144,71 +91,26 @@ $editions = (new Edition())->getEditions();
             <div class="input-group-prepend">
               <label class="input-group-text">Edition</label>
             </div>
-            <select class="custom-select" id="editions">
-              <?php foreach ($editions as $edition) { ?>
-                <option value="<?php echo $edition->getYear() ?>"><?php echo $edition->getYear() ?></option>
-              <?php } ?>
+            <select class="custom-select" id="edition">
+              <option value="-1">Select edition</option>
+              <option value="3">2020</option>
+              <option value="2">2019</option>
+              <option value="1">2018</option>
             </select>
+
           </div>
         </div>
       </div>
     </div>
-    <h3>Accepted Papers</h3>
-    <div class="d-flex">
-      <h4>Total Submissions:</h4>
-      <h4 id="papers"></h4>
+    <div id="result">
+
     </div>
-    <div id="chart_div_pie"></div>
-    <h3>Accepted Papers</h3>
-    <div id="chart_div_bar"></div>
 
     <div class="text-center text-muted">
       &copy; ITI Research Group<br>2018 - 2021 All rights reserved
     </div>
   </div>
   <br>
-
-  <script type="text/javascript">
-    console.log(papers_num);
-    let papers = document.getElementById("papers");
-
-    papers.textContent = papers_num;
-
-    let selectElement = document.getElementById("editions");
-    selectElement.addEventListener('change', async () => {
-
-      let year = selectElement.value;
-
-      const results = await $.ajax({
-        url: "getGraphsInfo.php",
-        dataType: "json",
-        type: "POST",
-        data: {
-          year
-        }
-      });
-
-      console.log(results);
-
-      var pieData = new google.visualization.DataTable();
-      pieData.addColumn('string', 'state');
-      pieData.addColumn('number', 'papers');
-      pieData.addRows([
-        ['Accepted', parseInt(results[1]["accepted"])],
-        ['Rejected', parseInt(results[1]["rejected"])],
-      ]);
-
-      var barData = google.visualization.arrayToDataTable(results[0]);
-
-      pieChart.draw(pieData, options);
-      papers.textContent = results[1]["papers"];
-
-      barChart.draw(barData, google.charts.Bar.convertOptions(options));
-    })
-  </script>
-
-
 </body>
-
 
 </html>
